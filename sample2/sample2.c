@@ -26,16 +26,19 @@ static char msg[BUF_LEN];
 static char *msg_ptr;
 static int major;
 static int Device_Open=0;
+static loff_t file_pos=0;
 
 static int device_open(struct inode *, struct file *);
 static int device_release(struct inode *, struct file *);
 static ssize_t device_read(struct file *, char *, size_t, loff_t *);
 static ssize_t device_write(struct file *, const char *, size_t, loff_t *);
+static loff_t device_llseek(struct file *file, loff_t off, int whence);
 
 static struct file_operations fops =
 {
 	.read = device_read,
 	.write = device_write,
+	.llseek = device_llseek,
 	.open = device_open,
 	.release = device_release,
 };
@@ -48,6 +51,7 @@ static int device_open(struct inode *inode, struct file *file)
 	if(Device_Open)
 	  return -EBUSY;
 
+	file_pos = 0;
 	Device_Open++;
 	return SUCCESS; 
 }
@@ -75,6 +79,7 @@ static ssize_t device_read(struct file *file, char *buf, size_t count, loff_t *f
 	}
 
 	msg_ptr = &msg[0];
+	msg_ptr += file_pos;
 
 	err = copy_to_user(buf, msg_ptr, count);
 	if(err)
@@ -96,6 +101,7 @@ static ssize_t device_write(struct file *file, const char *buf, size_t count, lo
 	}
 
 	msg_ptr = &msg[0];
+	msg_ptr += file_pos;
 	err = copy_from_user(msg_ptr, buf, count);
 	if(err)
 	{
@@ -104,6 +110,36 @@ static ssize_t device_write(struct file *file, const char *buf, size_t count, lo
 	}
 
 	return count;
+}
+
+loff_t device_llseek(struct file *file, loff_t off, int whence)
+{
+	loff_t newpos;
+
+	switch(whence)
+	{
+		case 0:	/* SEEK_SET */
+			newpos = off;
+			break;
+
+		case 1: /* SEEK_CUR */
+			newpos = file_pos + off;
+			break;
+
+		case 2: /* SEEK_END */
+			newpos = BUF_LEN + off;
+			break;
+
+		default: /* can't happen */
+			return -EINVAL;
+	}
+
+	if(newpos < 0)
+	    return -EINVAL;
+
+	file_pos = newpos;
+
+	return newpos;
 }
 
 static int sample2_init(void)
