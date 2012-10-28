@@ -1,0 +1,1 @@
+cmd_/home/timonkun/Workspace/qemu/samples/sample1/hello.ko := arm-none-linux-gnueabi-ld -EL -r  -T /home/timonkun/Workspace/qemu/linux-3.6.3/scripts/module-common.lds --build-id  -o /home/timonkun/Workspace/qemu/samples/sample1/hello.ko /home/timonkun/Workspace/qemu/samples/sample1/hello.o /home/timonkun/Workspace/qemu/samples/sample1/hello.mod.o
