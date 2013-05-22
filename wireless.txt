@@ -1,0 +1,12 @@
+rtl8192cu
+
+http://www.realtek.com/downloads/downloadsView.aspx?Langid=1&PNid=48&PFid=48&Level=5&Conn=4&DownTypeID=3&GetDown=false&Downloads=true#RTL8192CU
+
+http://blog.csdn.net/hanhan1988_0150/article/details/6966428
+http://blog.csdn.net/bianjianhui126/article/details/5883079
+
+http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
+
+http://www.armzone.com/bbs/forum.php?mod=viewthread&tid=59&reltid=65&pre_thread_id=0&pre_pos=1&ext=
+
+http://hi.baidu.com/jiker4836/item/4d107bfaad24aa1be2e3bda5
